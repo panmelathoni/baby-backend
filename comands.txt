@@ -1,0 +1,6 @@
+Comandos para criar uma migration
+
+PM> cd .\babyApi.data
+PM> dotnet ef --startup-project ../babyApi/ migrations add initial
+
+dotnet ef --startup-project ../babyApi/ migrations update database
