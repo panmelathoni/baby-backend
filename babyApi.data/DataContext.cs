@@ -8,7 +8,14 @@ namespace babyApi.data
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        
+        public DbSet<BabyProfile> Babies { get; set; }
+        public DbSet<BabyActivities> BabyActivities { get; set; }
+        public DbSet<Activities> Activities { get; set; }
+
+
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

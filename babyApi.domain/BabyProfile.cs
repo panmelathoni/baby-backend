@@ -22,6 +22,11 @@ namespace babyApi.domain
 
         public int Size { get; set; }
 
+        public User User { get; set; }
+
+        public virtual List<BabyActivities> BabiesActivities { get; set; }
+
+
 
     }
 }

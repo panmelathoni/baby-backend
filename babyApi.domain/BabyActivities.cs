@@ -19,5 +19,9 @@ namespace babyApi.domain
         public DateTime EndTime { get; set; }
 
         public string Description { get; set; } = string.Empty;
+
+        public Activities Activities { get; set; }
+
+        public BabyActivities BabyActivities { get; set; }
     }
 }
