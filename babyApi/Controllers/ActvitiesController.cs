@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using babyApi.domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace babyApi.Controllers
 {
@@ -8,53 +9,34 @@ namespace babyApi.Controllers
     [ApiController]
     public class ActvitiesController : ControllerBase
     {
-        private static List<Activities> activitiesType = new List<Activities>
 
+        private readonly DataContext _context;
+
+        public ActvitiesController(DataContext context)
         {
-                new Activities {
-                    Id = 1,
-                    NameActivity = "Breastfeeding",
-                    CodeActivity = "Not",
-                    Icon = "Bottle",
-                   
-
-
-               },
-                 new Activities {
-                    Id = 2,
-                    NameActivity = "Breastfeeding",
-                    CodeActivity = "yes",
-                    Icon = "Bottle",
-
-
-               },
-
-
-            };
-        private readonly DataContext dataContext;
-
-        public ActvitiesController(DataContext context) {
-           
+            _context = context;
         }
+       
 
         [HttpGet]
 
         public async Task<ActionResult<List<Activities>>> Get()
         {
-            return Ok(activitiesType);
+            return Ok(await _context.Activities.ToListAsync());
+
         }
 
         [HttpGet("{id}")]
 
         public async Task<ActionResult<List<Activities>>> Get(int id)
         {
-            var activity = activitiesType.Find(x => x.Id == id);
+            var activity = _context.Activities.FindAsync(id);
             if (activity == null)
-            {
+            
                 return BadRequest("Activity not Found.");
-            }
+            
 
-            return Ok(activity);
+                return Ok(activity);
         }
 
 
@@ -62,28 +44,32 @@ namespace babyApi.Controllers
 
         public async Task<ActionResult<List<Activities>>> AddActivity(Activities activity)
         {
-            activitiesType.Add(activity);
+           _context.Activities.Add(activity);
 
-            return Ok(activity);
+            return Ok(await _context.Activities.ToListAsync());
+
         }
 
         [HttpPut]
 
         public async Task<ActionResult<List<Activities>>> UpdateActivity(Activities request)
         {
-            var activity = activitiesType.Find(x => x.Id == request.Id);
-            if (activity == null)
+            var dbactivity = await _context.Activities.FindAsync(request.Id)
+            if (dbactivity == null)
             {
-                return BadRequest("Baby not Found.");
+                return BadRequest("Activity not Found.");
 
 
               
             }
-                activity.Id = request.Id;
-                activity.NameActivity = request.NameActivity;
-                activity.CodeActivity = request.CodeActivity;
-                activity.Icon = request.Icon;
-            return Ok(activity);
+            dbactivity.Id = request.Id;
+            dbactivity.NameActivity = request.NameActivity;
+            dbactivity.CodeActivity = request.CodeActivity;
+            dbactivity.Icon = request.Icon;
+
+            await _context.SaveChangesAsync();
+            return Ok(await _context.Activities.ToListAsync());
+
         }
 
 
@@ -91,16 +77,15 @@ namespace babyApi.Controllers
 
         public async Task<ActionResult<List<Activities>>> Delete(int id)
         {
-            var activity = activitiesType.Find(x => x.Id == id);
-            if (activity == null)
-            {
-                return BadRequest("Baby not Found.");
+            var dbactivity = await _context.Activities.FindAsync(Id);
+            if (dbactivity == null)
+            
+                return BadRequest("Activity not Found.");
 
+            _context.Activities.Remove(dbactivity);
+            await _context.SaveChangesAsync();
+            return Ok(await _context.Activities.ToListAsync());
 
-            }
-
-            activitiesType.Remove(activity);
-            return Ok(activitiesType);
         }
 
     }

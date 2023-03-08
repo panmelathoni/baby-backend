@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using babyApi.domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace babyApi.Controllers
 {
@@ -8,48 +9,32 @@ namespace babyApi.Controllers
     [ApiController]
     public class BabyProfileController : ControllerBase
     {
-        private static List<BabyProfile> babies = new List<BabyProfile>
+        private readonly DataContext _context;
 
+        public BabyProfileController(DataContext context)
         {
-                new BabyProfile {
-                    Id = 1,
-                    UserId = 1,
-                    Name = "Matteo",
-                    Birth = "23-09-2022",
-                    InicialWeight = 1820,
-                    ActualWeight = 5960
+            _context = context;
+        }
 
-
-               },
-                 new BabyProfile {
-                    Id = 2,
-                    UserId = 1,
-                    Name = "Caio",
-                    Birth = "10-12-2022",
-                    InicialWeight = 1820,
-                    ActualWeight = 5960
-
-               },
-
-
-            };
+   
 
         [HttpGet] 
 
         public async Task<ActionResult<List<BabyProfile>>> Get()
         {
-            return Ok(babies);
+            return Ok(await _context.Babies.ToListAsync());
+
         }
 
         [HttpGet("{id}")]
 
         public async Task<ActionResult<List<BabyProfile>>> Get(int id)
         {
-            var baby = babies.Find(x => x.Id == id);
+            var baby = _context.Babies.FindAsync(id);
             if (baby == null)
-            {
-                return BadRequest("Baby not Found.");
-            }
+
+                return BadRequest("Baby Profile not Found.");
+
 
             return Ok(baby);
         }
@@ -57,33 +42,30 @@ namespace babyApi.Controllers
 
         [HttpPost]
 
-        public async Task<ActionResult<List<BabyProfile>>> AddUser(BabyProfile baby)
+        public async Task<ActionResult<List<BabyProfile>>> AddBabyProfile(BabyProfile Babies)
         {
-            babies.Add(baby);
+            _context.Babies.Add(Babies);
 
-            return Ok(babies);
+            return Ok(await _context.Babies.ToListAsync());
         }
 
         [HttpPut]
 
         public async Task<ActionResult<List<BabyProfile>>> UpdateBaby(BabyProfile request)
         {
-            var baby = babies.Find(x => x.Id == request.Id);
-            if (baby == null)
-            {
-                return BadRequest("Baby not Found.");
-
-               
-                
-                baby.Name = request.Name;   
-                baby.Birth = request.Birth;
-                baby.InicialWeight = request.InicialWeight;
-                baby.ActualWeight = request.ActualWeight;
-                baby.Size = request.Size;
+            var dbbaby = await _context.Babies.FindAsync(request.Id);
+            if (dbbaby == null)
             
-            }
+                return BadRequest("Baby Profile not Found.");
 
-            return Ok(babies);
+                dbbaby.Name = request.Name;
+                dbbaby.Birth = request.Birth;
+                dbbaby.InicialWeight = request.InicialWeight;
+                dbbaby.ActualWeight = request.ActualWeight;
+                dbbaby.Size = request.Size;
+
+            await _context.SaveChangesAsync();
+            return Ok(await _context.Babies.ToListAsync());
         }
 
 
@@ -91,16 +73,15 @@ namespace babyApi.Controllers
 
         public async Task<ActionResult<List<BabyProfile>>> Delete(int id)
         {
-            var baby = babies.Find(x => x.Id == id);
-            if (baby == null)
-            {
-                return BadRequest("Baby not Found.");
+            var dbbaby =await _context.Babies.FindAsync(id);
+            if (dbbaby == null)
+            
+                return BadRequest("Baby Profile not Found.");
 
+            _context.Babies.Remove(dbbaby);
+            await _context.SaveChangesAsync();
+            return Ok(await _context.Babies.ToListAsync());
 
-            }
-
-            babies.Remove(baby);
-            return Ok(babies);
         }
 
     }

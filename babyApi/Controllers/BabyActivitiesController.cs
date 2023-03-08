@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using babyApi.domain;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace babyApi.Controllers
@@ -9,46 +10,28 @@ namespace babyApi.Controllers
     [ApiController]
     public class BabyActivitiesController : ControllerBase
     {
-        private static List<BabyActivities> activities = new List<BabyActivities>
 
+        private readonly DataContext _context;
+
+        public BabyActivitiesController(DataContext context)
         {
-                new BabyActivities {
-                    Id = 1,
-                    BabyId = 1,
-                    ActivityId = 1,
-                    InitialTime = new DateTime(),
-                    EndTime = new DateTime(),
-                    Description = ""
+            _context = context;
+        }
 
-
-
-               },
-                 new BabyActivities {
-                    Id = 2,
-                    BabyId = 1,
-                    ActivityId = 1,
-                    InitialTime = new DateTime(),
-                    EndTime = new DateTime(),
-                    Description = ""
-
-
-               },
-
-
-            };
+      
 
         [HttpGet]
 
         public async Task<ActionResult<List<BabyActivities>>> Get()
         {
-            return Ok(activities);
+            return Ok(await _context.BabyActivities.ToListAsync());
         }
 
         [HttpGet("{id}")]
 
         public async Task<ActionResult<List<BabyActivities>>> Get(int id)
         {
-            var activity = activities.Find(x => x.Id == id);
+            var activity = _context.BabyActivities.FindAsync();
             if (activity == null)
             {
                 return BadRequest("Baby Activity not Found.");
@@ -62,30 +45,32 @@ namespace babyApi.Controllers
 
         public async Task<ActionResult<List<BabyActivities>>> AddBabyActivity(BabyActivities activity)
         {
-            activities.Add(activity);
+           _context.BabyActivities.Add(activity);
 
-            return Ok(activity);
+
+
+            return Ok(await _context.BabyActivities.ToListAsync());
         }
 
         [HttpPut]
 
         public async Task<ActionResult<List<BabyActivities>>> UpdateBabyActivity(BabyActivities request)
         {
-            var activity = activities.Find(x => x.Id == request.Id);
-            if (activity == null)
-            {
+            var dbactivity = await _context.BabyActivities.FindAsync( request.Id);
+            if (dbactivity == null)
+            
                 return BadRequest("Baby Activity not Found.");
 
+            
+            dbactivity.Id = request.Id;
+            dbactivity.BabyId = request.BabyId;
+            dbactivity.ActivityId = request.ActivityId;
+            dbactivity.InitialTime = request.InitialTime;
+            dbactivity.EndTime = request.EndTime;
+            dbactivity.Description = request.Description;
 
-
-            }
-            activity.Id = request.Id;
-            activity.BabyId = request.BabyId;
-            activity.ActivityId = request.ActivityId;   
-            activity.InitialTime = request.InitialTime; 
-            activity.EndTime = request.EndTime;
-            activity.Description = request.Description; 
-            return Ok(activity);
+            await _context.SaveChangesAsync();
+            return Ok(await _context.BabyActivities.ToListAsync());
         }
 
 
@@ -93,16 +78,15 @@ namespace babyApi.Controllers
 
         public async Task<ActionResult<List<BabyActivities>>> Delete(int id)
         {
-            var activity = activities.Find(x => x.Id == id);
-            if (activity == null)
-            {
+            var dbactivity = await _context.BabyActivities.FindAsync(Id);
+            if (dbactivity == null)
+            
                 return BadRequest("Baby Activity not Found.");
 
+            _context.BabyActivities.Remove(dbactivity);
+            await _context.SaveChangesAsync();
+            return Ok(await _context.BabyActivities.ToListAsync());
 
-            }
-
-            activities.Remove(activity);
-            return Ok(activities);
         }
 
     }
