@@ -13,10 +13,6 @@ namespace babyApi.data
         public DbSet<Activities> Activities { get; set; }
 
 
-
-
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
