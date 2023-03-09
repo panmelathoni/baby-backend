@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using babyApi.domain;
+﻿using babyApi.domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace babyApi.Controllers
 {
@@ -20,7 +18,7 @@ namespace babyApi.Controllers
 
         [HttpGet]
 
-        public async Task<ActionResult<List<Activities>>> Get()
+        public async Task<ActionResult<List<Activity>>> Get()
         {
             return Ok(await _context.Activities.ToListAsync());
 
@@ -28,7 +26,7 @@ namespace babyApi.Controllers
 
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<List<Activities>>> Get(int id)
+        public async Task<ActionResult<List<Activity>>> Get(int id)
         {
             var activity = _context.Activities.FindAsync(id);
             if (activity == null)
@@ -42,19 +40,21 @@ namespace babyApi.Controllers
 
         [HttpPost]
 
-        public async Task<ActionResult<List<Activities>>> AddActivity(Activities activity)
+        public async Task<ActionResult<List<Activity>>> AddActivity(Activity activity)
         {
-           _context.Activities.Add(activity);
+           await _context.Activities.AddAsync(activity);
 
-            return Ok(await _context.Activities.ToListAsync());
-
+            await _context.SaveChangesAsync();
+           
+            var activities = await _context.Activities.ToListAsync();
+            return Ok(activities);
         }
 
         [HttpPut]
 
-        public async Task<ActionResult<List<Activities>>> UpdateActivity(Activities request)
+        public async Task<ActionResult<List<Activity>>> UpdateActivity(Activity request)
         {
-            var dbactivity = await _context.Activities.FindAsync(request.Id)
+            var dbactivity = await _context.Activities.FindAsync(request.Id);
             if (dbactivity == null)
             {
                 return BadRequest("Activity not Found.");
@@ -75,9 +75,9 @@ namespace babyApi.Controllers
 
         [HttpDelete("{id}")]
 
-        public async Task<ActionResult<List<Activities>>> Delete(int id)
+        public async Task<ActionResult<List<Activity>>> Delete(int id)
         {
-            var dbactivity = await _context.Activities.FindAsync(Id);
+            var dbactivity = await _context.Activities.FindAsync(id);
             if (dbactivity == null)
             
                 return BadRequest("Activity not Found.");

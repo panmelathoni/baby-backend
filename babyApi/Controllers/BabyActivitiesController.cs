@@ -22,16 +22,16 @@ namespace babyApi.Controllers
 
         [HttpGet]
 
-        public async Task<ActionResult<List<BabyActivities>>> Get()
+        public async Task<ActionResult<List<BabyActivity>>> Get()
         {
-            return Ok(await _context.BabyActivities.ToListAsync());
+            return Ok(await _context.BabiesActivities.ToListAsync());
         }
 
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<List<BabyActivities>>> Get(int id)
+        public async Task<ActionResult<List<BabyActivity>>> Get(int id)
         {
-            var activity = _context.BabyActivities.FindAsync();
+            var activity = _context.BabiesActivities.FindAsync(id);
             if (activity == null)
             {
                 return BadRequest("Baby Activity not Found.");
@@ -43,49 +43,49 @@ namespace babyApi.Controllers
 
         [HttpPost]
 
-        public async Task<ActionResult<List<BabyActivities>>> AddBabyActivity(BabyActivities activity)
+        public async Task<ActionResult<List<BabyActivity>>> AddBabyActivity(BabyActivity activity)
         {
-           _context.BabyActivities.Add(activity);
+          await _context.BabiesActivities.AddAsync(activity);
 
 
-
-            return Ok(await _context.BabyActivities.ToListAsync());
+            await _context.SaveChangesAsync();
+            return Ok(await _context.BabiesActivities.ToListAsync());
         }
 
         [HttpPut]
 
-        public async Task<ActionResult<List<BabyActivities>>> UpdateBabyActivity(BabyActivities request)
+        public async Task<ActionResult<List<BabyActivity>>> UpdateBabyActivity(BabyActivity request)
         {
-            var dbactivity = await _context.BabyActivities.FindAsync( request.Id);
+            var dbactivity = await _context.BabiesActivities.FindAsync( request.Id);
             if (dbactivity == null)
             
                 return BadRequest("Baby Activity not Found.");
 
             
             dbactivity.Id = request.Id;
-            dbactivity.BabyId = request.BabyId;
+            dbactivity.BabyProfileId = request.BabyProfileId;
             dbactivity.ActivityId = request.ActivityId;
             dbactivity.InitialTime = request.InitialTime;
             dbactivity.EndTime = request.EndTime;
             dbactivity.Description = request.Description;
 
             await _context.SaveChangesAsync();
-            return Ok(await _context.BabyActivities.ToListAsync());
+            return Ok(await _context.BabiesActivities.ToListAsync());
         }
 
 
         [HttpDelete("{id}")]
 
-        public async Task<ActionResult<List<BabyActivities>>> Delete(int id)
+        public async Task<ActionResult<List<BabyActivity>>> Delete(int id)
         {
-            var dbactivity = await _context.BabyActivities.FindAsync(Id);
+            var dbactivity = await _context.BabiesActivities.FindAsync(id);
             if (dbactivity == null)
             
                 return BadRequest("Baby Activity not Found.");
 
-            _context.BabyActivities.Remove(dbactivity);
+            _context.BabiesActivities.Remove(dbactivity);
             await _context.SaveChangesAsync();
-            return Ok(await _context.BabyActivities.ToListAsync());
+            return Ok(await _context.BabiesActivities.ToListAsync());
 
         }
 

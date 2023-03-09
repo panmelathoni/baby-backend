@@ -43,9 +43,14 @@ namespace babyApi.Controllers
 
         public async Task<ActionResult<List<User>>> AddUser(User user)
         {
-           _context.Users.Add(user);
 
-            return Ok(await _context.Users.ToListAsync());
+            await _context.Users.AddAsync(user);
+
+        
+
+            await _context.SaveChangesAsync();
+            var users = await _context.Users.ToListAsync();
+            return Ok(users);
         }
 
         [HttpPut]

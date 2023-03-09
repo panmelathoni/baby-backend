@@ -44,8 +44,9 @@ namespace babyApi.Controllers
 
         public async Task<ActionResult<List<BabyProfile>>> AddBabyProfile(BabyProfile Babies)
         {
-            _context.Babies.Add(Babies);
+          await  _context.Babies.AddAsync(Babies);
 
+            await _context.SaveChangesAsync();
             return Ok(await _context.Babies.ToListAsync());
         }
 

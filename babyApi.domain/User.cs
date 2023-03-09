@@ -10,6 +10,6 @@
 
         public string Password { get; set; } = string.Empty;
 
-        public List<BabyProfile> Babies { get; set; }
+      
     }
 }
