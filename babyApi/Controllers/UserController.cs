@@ -24,8 +24,6 @@ namespace babyApi.Controllers
 
 
 
-       
-
         [HttpGet]
 
         public IActionResult GetAll()
