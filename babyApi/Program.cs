@@ -1,5 +1,7 @@
 global  using babyApi.data;
 global using Microsoft.EntityFrameworkCore;
+using babyApi.domain;
+using babyApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +16,16 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+builder.Services.AddTransient<IGenericRepository<Activity>, GenericRepository<Activity>>() ;
+builder.Services.AddTransient<IGenericRepository<BabyActivity>, GenericRepository<BabyActivity>>();
+builder.Services.AddTransient<IGenericRepository<BabyProfile>, GenericRepository<BabyProfile>>();
+builder.Services.AddTransient<IGenericRepository<User>, GenericRepository<User>>();
+
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline. 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -1,4 +1,5 @@
 ﻿using babyApi.domain;
+using babyApi.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,85 +10,79 @@ namespace babyApi.Controllers
     public class UserController : ControllerBase
     {
 
-        private readonly DataContext _context;
+        //private readonly DataContext _context;
+        private readonly IGenericRepository<User> _userRepo;
+       
 
-        public UserController(DataContext context)
+
+
+        public UserController( IGenericRepository<User> userRepo)
         {
-            _context = context;
+           
+            _userRepo = userRepo;
         }
+
+
+
        
 
         [HttpGet]
 
-        public async Task<ActionResult<List<User>>> Get()
+        public IActionResult GetAll()
         {
-
-
-            return Ok(await _context.Users.ToListAsync());
+            return Ok(_userRepo.GetAll());
         }
+
 
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<List<User>>> Get(int id)
+        public IActionResult GetById(int id)
         {
-            var user = _context.Users.FindAsync(id);
-            if (user == null)
-            
-            return BadRequest("User not Found.");
-            
+          
+            if(_userRepo.GetById(id) == null) 
+                return BadRequest("User not Found");  
 
-            return Ok(user);
+            return Ok(_userRepo.GetById(id));   
+           
         }
+
+       
 
         [HttpPost]
 
-        public async Task<ActionResult<List<User>>> AddUser(User user)
+        public IActionResult AddUser(User user) 
         {
-
-            await _context.Users.AddAsync(user);
-
-        
-
-            await _context.SaveChangesAsync();
-            var users = await _context.Users.ToListAsync();
-            return Ok(users);
+           return Ok(_userRepo.Add(user));
         }
+
+      
 
         [HttpPut]
 
-        public async Task<ActionResult<List<User>>> UpdateUser(User request)
+        public IActionResult UpdateUser(User user)
         {
-            var dbuser = await  _context.Users.FindAsync(request.Id);
-            if (dbuser == null)
-            
-                return BadRequest("User not Found.");
-                
-                dbuser.Name = request.Name;
-                dbuser.Email = request.Email;
-                dbuser.Password = request.Password;
-     
-                await _context.SaveChangesAsync();
-                return Ok(await _context.Users.ToListAsync());
-        }
+            if (user == null)
+                return BadRequest("User Not Found");
 
+                    return Ok(_userRepo.Update(user));
+        }
 
 
         [HttpDelete("{id}")]
 
-        public async Task<ActionResult<List<User>>> Delete(int Id)
+        public IActionResult DeleteUser(User user)
         {
-            var dbuser = await _context.Users.FindAsync(Id);
-            if (dbuser == null)
-            
-                return BadRequest("User not Found.");
+            if (user == null)
+                return BadRequest("User not Found");
 
-               _context.Users.Remove(dbuser);
-                await _context.SaveChangesAsync();
-                return Ok(await _context.Users.ToListAsync());
+            return Ok(_userRepo.Delete(user));
+
         }
+    }
+      
 
     }
 
 
 
-}
+
