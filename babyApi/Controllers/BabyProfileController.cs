@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using babyApi.domain;
 using Microsoft.EntityFrameworkCore;
+using babyApi.Repositories;
 
 namespace babyApi.Controllers
 {
@@ -9,79 +10,62 @@ namespace babyApi.Controllers
     [ApiController]
     public class BabyProfileController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IGenericRepository<BabyProfile> _babyProfileRepo;
 
-        public BabyProfileController(DataContext context)
+        public BabyProfileController(IGenericRepository<BabyProfile> babyProfileRepo)
         {
-            _context = context;
+
+            _babyProfileRepo = babyProfileRepo;
         }
 
-   
 
-        [HttpGet] 
+        [HttpGet]
 
-        public async Task<ActionResult<List<BabyProfile>>> Get()
+        public IActionResult GetAll()
         {
-            return Ok(await _context.Babies.ToListAsync());
-
+            return Ok(_babyProfileRepo.GetAll());
         }
+
 
         [HttpGet("{id}")]
 
-        public async Task<ActionResult<List<BabyProfile>>> Get(int id)
+        public IActionResult GetById(int id)
         {
-            var baby = _context.Babies.FindAsync(id);
-            if (baby == null)
 
-                return BadRequest("Baby Profile not Found.");
+            if (_babyProfileRepo.GetById(id) == null)
+                return BadRequest("Baby Profile Not Found");
 
+            return Ok(_babyProfileRepo.GetById(id));
 
-            return Ok(baby);
         }
 
 
         [HttpPost]
 
-        public async Task<ActionResult<List<BabyProfile>>> AddBabyProfile(BabyProfile Babies)
+        public IActionResult AddBabyProfile(BabyProfile babyProfile)
         {
-          await  _context.Babies.AddAsync(Babies);
-
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Babies.ToListAsync());
+            return Ok(_babyProfileRepo.Add(babyProfile));
         }
 
         [HttpPut]
 
-        public async Task<ActionResult<List<BabyProfile>>> UpdateBaby(BabyProfile request)
+        public IActionResult UpdateBabyProfile(BabyProfile babyProfile)
         {
-            var dbbaby = await _context.Babies.FindAsync(request.Id);
-            if (dbbaby == null)
-            
-                return BadRequest("Baby Profile not Found.");
+            if (babyProfile == null)
+                return BadRequest("Baby Profile Not Found");
 
-                dbbaby.Name = request.Name;
-                dbbaby.Birth = request.Birth;
-                dbbaby.InicialWeight = request.InicialWeight;
-                dbbaby.ActualWeight = request.ActualWeight;
-                dbbaby.Size = request.Size;
-
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Babies.ToListAsync());
+            return Ok(_babyProfileRepo.Update(babyProfile));
         }
 
 
         [HttpDelete("{id}")]
 
-        public async Task<ActionResult<List<BabyProfile>>> Delete(int id)
+        public IActionResult DeleteBabyProfile(BabyProfile babyProfile)
         {
-            var dbbaby =await _context.Babies.FindAsync(id);
-            if (dbbaby == null)
-            
-                return BadRequest("Baby Profile not Found.");
+            if (babyProfile == null)
+                return BadRequest("Baby Profile Not Found");
 
-            _context.Babies.Remove(dbbaby);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Babies.ToListAsync());
+            return Ok(_babyProfileRepo.Delete(babyProfile));
 
         }
 

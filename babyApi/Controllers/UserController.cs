@@ -9,13 +9,8 @@ namespace babyApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
-        //private readonly DataContext _context;
-        private readonly IGenericRepository<User> _userRepo;
+     private readonly IGenericRepository<User> _userRepo;
        
-
-
-
         public UserController( IGenericRepository<User> userRepo)
         {
            
@@ -38,7 +33,7 @@ namespace babyApi.Controllers
         {
           
             if(_userRepo.GetById(id) == null) 
-                return BadRequest("User not Found");  
+                return BadRequest("User Not Found");  
 
             return Ok(_userRepo.GetById(id));   
            
@@ -71,7 +66,7 @@ namespace babyApi.Controllers
         public IActionResult DeleteUser(User user)
         {
             if (user == null)
-                return BadRequest("User not Found");
+                return BadRequest("User Not Found");
 
             return Ok(_userRepo.Delete(user));
 
