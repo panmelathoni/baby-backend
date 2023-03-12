@@ -1,5 +1,5 @@
-﻿using babyApi.domain;
-using babyApi.Repositories;
+﻿using babyApi.data.Repositories;
+using babyApi.domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace babyApi.Controllers

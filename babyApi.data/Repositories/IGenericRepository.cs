@@ -1,4 +1,7 @@
-﻿namespace babyApi.Repositories
+﻿using System.Linq.Expressions;
+
+namespace babyApi.data.Repositories
+
 {
     public interface IGenericRepository<T> where T : class
     {
@@ -9,6 +12,6 @@
         T GetById(int id);
         IEnumerable<T> GetAll();
 
-
+        IEnumerable<T> GetBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
     }
 }

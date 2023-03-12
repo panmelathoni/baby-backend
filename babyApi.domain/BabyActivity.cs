@@ -1,14 +1,14 @@
 ﻿namespace babyApi.domain
 {
-    public class BabyActivity
-    {
 
+
+    public class BabyActivity { 
         public int Id { get; set; }
 
 
         public DateTime InitialTime { get; set; }
-
         public DateTime EndTime { get; set; }
+
 
         public string Description { get; set; } = string.Empty;
 

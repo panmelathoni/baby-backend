@@ -1,7 +1,7 @@
-﻿using babyApi.domain;
-using babyApi.Repositories;
-using Microsoft.AspNetCore.Http;
+﻿using babyApi.data.Repositories;
+using babyApi.domain;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace babyApi.Controllers
 {
@@ -17,7 +17,7 @@ namespace babyApi.Controllers
             _userRepo = userRepo;
         }
 
-
+     
 
         [HttpGet]
 

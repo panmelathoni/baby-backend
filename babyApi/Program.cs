@@ -1,7 +1,9 @@
 global  using babyApi.data;
 global using Microsoft.EntityFrameworkCore;
+using babyApi.data.Repositories;
 using babyApi.domain;
-using babyApi.Repositories;
+using babyApi.services.Interfaces;
+using babyApi.services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +22,7 @@ builder.Services.AddTransient<IGenericRepository<Activity>, GenericRepository<Ac
 builder.Services.AddTransient<IGenericRepository<BabyActivity>, GenericRepository<BabyActivity>>();
 builder.Services.AddTransient<IGenericRepository<BabyProfile>, GenericRepository<BabyProfile>>();
 builder.Services.AddTransient<IGenericRepository<User>, GenericRepository<User>>();
-
+builder.Services.AddScoped<IJWTService, JWTService>();
 
 
 var app = builder.Build();

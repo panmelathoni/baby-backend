@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using babyApi.domain;
 using Microsoft.EntityFrameworkCore;
-using babyApi.Repositories;
+
+using babyApi.data.Repositories;
 
 namespace babyApi.Controllers
 {

@@ -12,8 +12,8 @@ using babyApi.data;
 namespace babyApi.data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230308175300_addRelationship")]
-    partial class addRelationship
+    [Migration("20230312192616_initialMigration")]
+    partial class initialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -133,9 +133,13 @@ namespace babyApi.data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 

@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\babyApi.data\babyApi.data.csproj" />
     <ProjectReference Include="..\babyApi.domain\babyApi.domain.csproj" />
+    <ProjectReference Include="..\babyApi.services\babyApi.services.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,7 @@
-﻿namespace babyApi.Repositories
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+
+namespace babyApi.data.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
@@ -67,5 +70,20 @@
                 return false;
             }
         }
+
+        public IEnumerable<T> GetBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        {
+            var query = _ctx.Set<T>().AsQueryable().AsNoTracking();
+
+            if (includes.Any())
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+            return query.Where(predicate).ToList();
+        }
+
     }
 }
