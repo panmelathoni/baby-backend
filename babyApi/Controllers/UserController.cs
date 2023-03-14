@@ -1,7 +1,10 @@
 ﻿using babyApi.data.Repositories;
 using babyApi.domain;
+using babyApi.domain.Dto;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Cryptography;
+using System.Security.Claims;
+using babyApi.services.Interfaces;
 
 namespace babyApi.Controllers
 {
@@ -9,15 +12,17 @@ namespace babyApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-     private readonly IGenericRepository<User> _userRepo;
-       
-        public UserController( IGenericRepository<User> userRepo)
+        private readonly IGenericRepository<User> _userRepo;
+        private readonly IPasswordService _passwordService;
+
+        public UserController(IGenericRepository<User> userRepo, IPasswordService passwordService)
         {
-           
+
             _userRepo = userRepo;
+            _passwordService = passwordService;
         }
 
-     
+
 
         [HttpGet]
 
@@ -31,24 +36,33 @@ namespace babyApi.Controllers
 
         public IActionResult GetById(int id)
         {
-          
-            if(_userRepo.GetById(id) == null) 
-                return BadRequest("User Not Found");  
 
-            return Ok(_userRepo.GetById(id));   
-           
+            if (_userRepo.GetById(id) == null)
+                return BadRequest("User Not Found");
+
+            return Ok(_userRepo.GetById(id));
+
         }
 
-       
+
 
         [HttpPost]
 
-        public IActionResult AddUser(User user) 
+        public IActionResult AddUser(UserDto userDto)
         {
-           return Ok(_userRepo.Add(user));
+           ( byte[] passwordHash, byte[] passwordSalt) = _passwordService.CreatePasswordHash(userDto.Password);
+
+       
+            User user = new User();
+            user.Name = userDto.Name;
+            user.Email = userDto.Email;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            return Ok(_userRepo.Add(user));
         }
 
-      
+
 
         [HttpPut]
 
@@ -57,7 +71,7 @@ namespace babyApi.Controllers
             if (user == null)
                 return BadRequest("User Not Found");
 
-                    return Ok(_userRepo.Update(user));
+            return Ok(_userRepo.Update(user));
         }
 
 
@@ -71,10 +85,12 @@ namespace babyApi.Controllers
             return Ok(_userRepo.Delete(user));
 
         }
+ 
     }
+}
       
 
-    }
+    
 
 
 

@@ -23,6 +23,7 @@ builder.Services.AddTransient<IGenericRepository<BabyActivity>, GenericRepositor
 builder.Services.AddTransient<IGenericRepository<BabyProfile>, GenericRepository<BabyProfile>>();
 builder.Services.AddTransient<IGenericRepository<User>, GenericRepository<User>>();
 builder.Services.AddScoped<IJWTService, JWTService>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
 
 
 var app = builder.Build();

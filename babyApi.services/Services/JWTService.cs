@@ -2,13 +2,15 @@
 using babyApi.domain;
 using babyApi.domain.Dto;
 using babyApi.services.Interfaces;
-
+using System.Security.Cryptography;
 
 namespace babyApi.services.Services
 {
     public class JWTService : IJWTService
     {
         private readonly IGenericRepository<User> _userRepo;
+
+        public static User user = new User();
         public JWTService(IGenericRepository<User> userRepo)
         {
             _userRepo = userRepo;
@@ -27,6 +29,7 @@ namespace babyApi.services.Services
             };
             return userDtoLogged;
         }
-
+      
+  
     }
 }
