@@ -46,6 +46,7 @@ namespace babyApi.Controllers
 
 
 
+        //register God
         [HttpPost]
 
         public IActionResult AddUser(UserDto userDto)
@@ -61,6 +62,8 @@ namespace babyApi.Controllers
 
             return Ok(_userRepo.Add(user));
         }
+
+
 
 
 
@@ -85,7 +88,8 @@ namespace babyApi.Controllers
             return Ok(_userRepo.Delete(user));
 
         }
- 
+
+   
     }
 }
       

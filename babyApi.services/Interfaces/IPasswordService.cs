@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using babyApi.domain.Dto;
 
 namespace babyApi.services.Interfaces
 {
@@ -11,5 +8,6 @@ namespace babyApi.services.Interfaces
         public (byte[] passwordHash, byte[] passwordSalt) CreatePasswordHash(string password);
 
        public bool VerifyPassword (string password, byte[] passwordHash, byte[] passwordSalt);
+
     }
 }

@@ -8,7 +8,8 @@ namespace babyApi.services.Interfaces
        
         public UserDto UserLogin(UserDto userDto);
 
-       
+        public string CreateToken(string username);
+
        
     }
 }

@@ -6,6 +6,8 @@ using System.Text;
 namespace babyApi.services.Services
 {
     public class PasswordService : IPasswordService
+
+        
     {
         public (byte[] passwordHash, byte[] passwordSalt) CreatePasswordHash(string password)
         {
@@ -25,5 +27,7 @@ namespace babyApi.services.Services
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
+
+       
     }
 }

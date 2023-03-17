@@ -17,15 +17,17 @@ namespace babyApi.Controllers
 
             _jwtService = jwtService;
         }
-        [HttpPost]
 
+        //register God
+
+        [HttpPost("login")]
         public IActionResult UserLogin(UserDto userDto) 
         {
             return Ok(_jwtService.UserLogin(userDto));
         }
 
-        
-       
+
+
 
     }
 }
