@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Security.Claims;
 using babyApi.services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace babyApi.Controllers
 {
@@ -24,7 +25,7 @@ namespace babyApi.Controllers
 
 
 
-        [HttpGet]
+        [HttpGet, Authorize]
 
         public IActionResult GetAll()
         {
@@ -32,7 +33,7 @@ namespace babyApi.Controllers
         }
 
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize]
 
         public IActionResult GetById(int id)
         {
@@ -67,7 +68,7 @@ namespace babyApi.Controllers
 
 
 
-        [HttpPut]
+        [HttpPut, Authorize]
 
         public IActionResult UpdateUser(User user)
         {
@@ -78,7 +79,7 @@ namespace babyApi.Controllers
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
 
         public IActionResult DeleteUser(User user)
         {

@@ -4,12 +4,13 @@ using babyApi.domain;
 using Microsoft.EntityFrameworkCore;
 
 using babyApi.data.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace babyApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    [Authorize]
     public class BabyActivityController : ControllerBase
     {
         private readonly IGenericRepository<BabyActivity> _babyActivityRepo;

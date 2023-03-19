@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using babyApi.domain;
 using babyApi.data.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace babyApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BabyProfileController : ControllerBase
     {
         private readonly IGenericRepository<BabyProfile> _babyProfileRepo;
