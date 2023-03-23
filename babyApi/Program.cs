@@ -33,6 +33,7 @@ builder.Services.AddSwaggerGen(options =>
     });
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddControllers();
 builder.Services.AddTransient<IGenericRepository<Activity>, GenericRepository<Activity>>() ;

@@ -2,10 +2,10 @@
 using babyApi.domain;
 using babyApi.domain.Dto;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
-using System.Security.Claims;
 using babyApi.services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using System.Security.Claims;
 
 namespace babyApi.Controllers
 {
@@ -15,12 +15,14 @@ namespace babyApi.Controllers
     {
         private readonly IGenericRepository<User> _userRepo;
         private readonly IPasswordService _passwordService;
+        private readonly IMapper _mapper;
 
-        public UserController(IGenericRepository<User> userRepo, IPasswordService passwordService)
+        public UserController(IGenericRepository<User> userRepo, IPasswordService passwordService, IMapper mapper )
         {
 
             _userRepo = userRepo;
             _passwordService = passwordService;
+            _mapper = mapper;
         }
 
 
@@ -52,20 +54,19 @@ namespace babyApi.Controllers
 
         public IActionResult AddUser(UserDto userDto)
         {
-           ( byte[] passwordHash, byte[] passwordSalt) = _passwordService.CreatePasswordHash(userDto.Password);
+            (byte[] passwordHash, byte[] passwordSalt) = _passwordService.CreatePasswordHash(userDto.Password);
 
-       
-            User user = new User();
-            user.Name = userDto.Name;
-            user.Email = userDto.Email;
+
+            var user = _mapper.Map<User>(userDto);
+
+           
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
             return Ok(_userRepo.Add(user));
+
+
         }
-
-
-
 
 
         [HttpPut, Authorize]

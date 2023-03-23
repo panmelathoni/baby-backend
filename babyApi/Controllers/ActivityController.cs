@@ -1,5 +1,7 @@
-﻿using babyApi.data.Repositories;
+﻿using AutoMapper;
+using babyApi.data.Repositories;
 using babyApi.domain;
+using babyApi.domain.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,22 +14,26 @@ namespace babyApi.Controllers
     public class ActivityController : ControllerBase
     {
         private readonly IGenericRepository<Activity> _activityRepo;
+        private readonly IMapper _mapper;
 
 
 
-        public ActivityController(IGenericRepository<Activity> activityRepo)
+
+        public ActivityController(IGenericRepository<Activity> activityRepo, IMapper mapper)
         {
 
             _activityRepo = activityRepo;
+            _mapper = mapper;
         }
 
-
+        
 
         [HttpGet]
 
         public IActionResult GetAll()
         {
-            return Ok(_activityRepo.GetAll());
+            var actAll = _mapper.Map<List<ActivityDto>>(_activityRepo.GetAll());
+            return Ok(actAll);
         }
 
         [HttpGet("{id}")]
@@ -36,41 +42,49 @@ namespace babyApi.Controllers
         {
 
             if (_activityRepo.GetById(id) == null)
-                return BadRequest("User not Found");
+                return BadRequest("Activity not Found");
 
-            return Ok(_activityRepo.GetById(id));
+            var actById = _mapper.Map<ActivityDto>(_activityRepo.GetById(id));
+            return Ok(actById);
 
         }
 
 
         [HttpPost]
 
-        public IActionResult AddActivity(Activity activity)
+        public IActionResult AddActivity(ActivityDto activityDto)
         {
-            return Ok(_activityRepo.Add(activity));
+            var act = _mapper.Map<Activity>(activityDto);
+            return Ok(_activityRepo.Add(act));
         }
 
 
         [HttpPut]
 
-        public IActionResult UpdateActivity(Activity activity)
+        public IActionResult UpdateActivity(ActivityDto activityDto)
         {
-            if (activity == null)
-                return BadRequest("User Not Found");
 
-            return Ok(_activityRepo.Update(activity));
+            if (activityDto == null)
+                return BadRequest("Activity Not Found");
+
+            var act = _mapper.Map<Activity>(activityDto);
+
+            return Ok(_activityRepo.Update(act));
         }
 
 
         [HttpDelete("{id}")]
 
 
-        public IActionResult DeleteActivity(Activity activity)
+        public IActionResult DeleteActivity(ActivityDto activityDto)
         {
-            if (activity == null)
-                return BadRequest("User not Found");
+            if (activityDto == null)
+                return BadRequest("Activity not Found");
 
-            return Ok(_activityRepo.Delete(activity));
+            var act = _mapper.Map<Activity>(activityDto);
+
+
+            return Ok(_activityRepo.Delete(act));
 
         }
 

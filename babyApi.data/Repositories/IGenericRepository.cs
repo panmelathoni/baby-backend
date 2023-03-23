@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using babyApi.domain.Dto;
+using System.Linq.Expressions;
 
 namespace babyApi.data.Repositories
 
@@ -13,5 +14,6 @@ namespace babyApi.data.Repositories
         IEnumerable<T> GetAll();
 
         IEnumerable<T> GetBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+       
     }
 }
