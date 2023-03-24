@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 using babyApi.data.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using babyApi.domain.Dto;
 
 namespace babyApi.Controllers
 {
@@ -14,12 +16,15 @@ namespace babyApi.Controllers
     public class BabyActivityController : ControllerBase
     {
         private readonly IGenericRepository<BabyActivity> _babyActivityRepo;
+        private readonly IMapper _mapper;
 
 
-        public  BabyActivityController(IGenericRepository<BabyActivity> babyActivityRepo)
+
+        public BabyActivityController(IGenericRepository<BabyActivity> babyActivityRepo, IMapper mapper)
         {
 
             _babyActivityRepo = babyActivityRepo;
+            _mapper = mapper;
         }
 
 
@@ -28,7 +33,8 @@ namespace babyApi.Controllers
 
         public IActionResult GetAll()
         {
-            return Ok(_babyActivityRepo.GetAll());
+            var bAcAll = _mapper.Map<List<BabyActivityDto>>(_babyActivityRepo.GetAll());
+            return Ok(bAcAll);
         }
 
 
@@ -40,37 +46,43 @@ namespace babyApi.Controllers
             if (_babyActivityRepo.GetById(id) == null)
                 return BadRequest("Baby Activity Not Found");
 
-            return Ok(_babyActivityRepo.GetById(id));
+            var bAcById = _mapper.Map<BabyActivityDto>(_babyActivityRepo.GetById(id));
+
+            return Ok(bAcById);
 
         }
 
 
         [HttpPost]
 
-        public IActionResult AddBabyActivity(BabyActivity babyActivity)
+        public IActionResult AddBabyActivity(BabyActivityDto babyActivityDto)
         {
-            return Ok(_babyActivityRepo.Add(babyActivity));
+            var bAcAdd = _mapper.Map<BabyActivity>(babyActivityDto);
+            return Ok(_babyActivityRepo.Add(bAcAdd));
         }
 
         [HttpPut]
 
-        public IActionResult UpdateBabyActivity(BabyActivity babyActivity)
+        public IActionResult UpdateBabyActivity(BabyActivityDto babyActivityDto)
         {
-            if (babyActivity == null)
+            if (babyActivityDto == null)
                 return BadRequest("Baby Activity Not Found");
 
-            return Ok(_babyActivityRepo.Update(babyActivity));
+            var bActUp = _mapper.Map<BabyActivity>(babyActivityDto);
+
+            return Ok(_babyActivityRepo.Update(bActUp));
         }
 
 
         [HttpDelete("{id}")]
 
-        public IActionResult DeleteBabyActivity(BabyActivity babyActivity)
+        public IActionResult DeleteBabyActivity(BabyActivityDto babyActivityDto)
         {
-            if (babyActivity == null)
+            if (babyActivityDto == null)
                 return BadRequest("Baby Activity Not Found");
 
-            return Ok(_babyActivityRepo.Delete(babyActivity));
+            var bAcDel = _mapper.Map<BabyActivity>(babyActivityDto);
+            return Ok(_babyActivityRepo.Delete(bAcDel));
 
         }
 

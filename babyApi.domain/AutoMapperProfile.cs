@@ -22,9 +22,32 @@ namespace babyApi.domain
 
 
 
-            CreateMap<BabyActivity, BabyActivityDto>();
+            CreateMap<BabyActivity, BabyActivityDto>()
+                .ForMember(bacDto => bacDto.IdDto, bac => bac.MapFrom(bac => bac.Id))
+                .ForMember(bacDto => bacDto.InitialTimeDto,bac => bac.MapFrom(bac => bac.InitialTime))
+                .ForMember(bacDto => bacDto.EndTimeDto, bac => bac.MapFrom(bac => bac.EndTime))
+                .ForMember(bacDto => bacDto.DescriptionDto, bac => bac.MapFrom(bac => bac.Description))
+                .ForMember(bacDto => bacDto.ActivityIdDto, bac => bac.MapFrom(bac => bac.ActivityId))
+                .ForMember(bacDto => bacDto.ActivitiesDto, bac => bac.MapFrom(bac => bac.Activities))
+                .ReverseMap();
 
-            CreateMap<BabyProfile, BabyProfileDto>();
+
+
+            CreateMap<BabyProfile, BabyProfileDto>()
+            .ForMember(bpDto => bpDto.IdDto, bp => bp.MapFrom(bp => bp.Id))
+            .ForMember(bpDto => bpDto.UserIdDto, bp => bp.MapFrom(bp => bp.UserId))
+            .ForMember(bpDto => bpDto.NameDto, bp => bp.MapFrom(bp => bp.Name))
+            .ForMember(bpDto => bpDto.BirthDto, bp => bp.MapFrom(bp => bp.Birth))
+            .ForMember(bpDto => bpDto.InicialWeightDto, bp => bp.MapFrom(bp => bp.InicialWeight))
+            .ForMember(bpDto => bpDto.ActualWeightDto, bp => bp.MapFrom(bp => bp.ActualWeight))
+            .ForMember(bpDto => bpDto.SizeDto, bp => bp.MapFrom(bp => bp.Size))
+            .ReverseMap();
+
+
+
+
+
+
         }
     }
 }

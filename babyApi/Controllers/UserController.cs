@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using babyApi.services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
-using System.Security.Claims;
-
 namespace babyApi.Controllers
 {
     [Route("api/[controller]")]

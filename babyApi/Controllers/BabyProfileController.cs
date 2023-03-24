@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using babyApi.domain;
 using babyApi.data.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using babyApi.domain.Dto;
 
 namespace babyApi.Controllers
 {
@@ -12,11 +14,14 @@ namespace babyApi.Controllers
     public class BabyProfileController : ControllerBase
     {
         private readonly IGenericRepository<BabyProfile> _babyProfileRepo;
+        private readonly IMapper _mapper;
 
-        public BabyProfileController(IGenericRepository<BabyProfile> babyProfileRepo)
+
+        public BabyProfileController(IGenericRepository<BabyProfile> babyProfileRepo, IMapper mapper)
         {
 
             _babyProfileRepo = babyProfileRepo;
+            _mapper = mapper;
         }
 
 
@@ -24,7 +29,8 @@ namespace babyApi.Controllers
 
         public IActionResult GetAll()
         {
-            return Ok(_babyProfileRepo.GetAll());
+            var bpAll = _mapper.Map<List<BabyProfileDto>>(_babyProfileRepo.GetAll());
+            return Ok(bpAll);
         }
 
 
@@ -36,37 +42,44 @@ namespace babyApi.Controllers
             if (_babyProfileRepo.GetById(id) == null)
                 return BadRequest("Baby Profile Not Found");
 
-            return Ok(_babyProfileRepo.GetById(id));
+            var bpById = _mapper.Map<BabyProfileDto>(_babyProfileRepo.GetById(id));
+
+            return Ok(bpById);
 
         }
 
 
         [HttpPost]
 
-        public IActionResult AddBabyProfile(BabyProfile babyProfile)
+        public IActionResult AddBabyProfile(BabyProfileDto babyProfileDto)
         {
-            return Ok(_babyProfileRepo.Add(babyProfile));
+            var bpAdd = _mapper.Map<BabyProfile>(babyProfileDto);
+            return Ok(_babyProfileRepo.Add(bpAdd));
         }
 
         [HttpPut]
 
-        public IActionResult UpdateBabyProfile(BabyProfile babyProfile)
+        public IActionResult UpdateBabyProfile(BabyProfileDto babyProfileDto)
         {
-            if (babyProfile == null)
+            if (babyProfileDto == null)
                 return BadRequest("Baby Profile Not Found");
 
-            return Ok(_babyProfileRepo.Update(babyProfile));
+            var bpUp = _mapper.Map<BabyProfile>(babyProfileDto);
+
+            return Ok(_babyProfileRepo.Update(bpUp));
         }
 
 
         [HttpDelete("{id}")]
 
-        public IActionResult DeleteBabyProfile(BabyProfile babyProfile)
+        public IActionResult DeleteBabyProfile(BabyProfileDto babyProfileDto)
         {
-            if (babyProfile == null)
+            if (babyProfileDto == null)
                 return BadRequest("Baby Profile Not Found");
 
-            return Ok(_babyProfileRepo.Delete(babyProfile));
+            var bpDel = _mapper.Map<BabyProfile>(babyProfileDto);
+
+            return Ok(_babyProfileRepo.Delete(bpDel));
 
         }
 
