@@ -69,23 +69,23 @@ namespace babyApi.Controllers
 
         [HttpPut, Authorize]
 
-        public IActionResult UpdateUser(User user)
+        public IActionResult UpdateUser(UserDto userDto)
         {
-            if (user == null)
+            if (userDto == null)
                 return BadRequest("User Not Found");
-
-            return Ok(_userRepo.Update(user));
+            var userUp = _mapper.Map<User>(userDto);
+            return Ok(_userRepo.Update(userUp));
         }
 
 
         [HttpDelete("{id}"), Authorize]
 
-        public IActionResult DeleteUser(User user)
+        public IActionResult DeleteUser(UserDto userDto)
         {
-            if (user == null)
+            if (userDto == null)
                 return BadRequest("User Not Found");
-
-            return Ok(_userRepo.Delete(user));
+            var userDel = _mapper.Map<User>(userDto);
+            return Ok(_userRepo.Delete(userDel));
 
         }
 

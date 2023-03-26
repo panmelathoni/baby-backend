@@ -35,7 +35,7 @@ namespace babyApi.data.Repositories
         {
             try
             {
-                _entity.Remove(model );
+                _entity.Remove(model);
                 _ctx.SaveChanges();
                 return true;
             }
