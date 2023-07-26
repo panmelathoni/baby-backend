@@ -4,6 +4,7 @@ using babyApi.data.Repositories;
 using babyApi.domain;
 using babyApi.services.Interfaces;
 using babyApi.services.Services;
+using FluentAssertions.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -16,10 +17,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 
+
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionString"));
 });
+
+
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 

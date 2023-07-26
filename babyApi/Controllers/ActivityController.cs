@@ -26,7 +26,7 @@ namespace babyApi.Controllers
             _mapper = mapper;
         }
 
-        
+
 
         [HttpGet]
 
@@ -74,7 +74,6 @@ namespace babyApi.Controllers
 
 
         [HttpDelete("{id}")]
-
 
         public IActionResult DeleteActivity(ActivityDto activityDto)
         {
