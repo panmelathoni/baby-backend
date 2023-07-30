@@ -1,7 +1,7 @@
 ﻿using babyApi.domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace babyApi.data
+namespace babyApi.data.Context
 {
     public class DataContext : DbContext
     {
@@ -17,5 +17,6 @@ namespace babyApi.data
         {
             base.OnModelCreating(modelBuilder);
         }
+
     }
 }

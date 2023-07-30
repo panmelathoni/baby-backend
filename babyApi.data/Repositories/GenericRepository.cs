@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using babyApi.data.Context;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace babyApi.data.Repositories
@@ -6,7 +7,7 @@ namespace babyApi.data.Repositories
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
 
-        private DataContext _ctx;
+        protected readonly DataContext _ctx;
         DbSet<T> _entity = null; 
 
         public GenericRepository(DataContext ctx)

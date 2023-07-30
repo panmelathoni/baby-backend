@@ -11,14 +11,14 @@ namespace babyApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IGenericRepository<User> _userRepo;
+        private readonly IGenericRepository<User> _userRepository;
         private readonly IPasswordService _passwordService;
         private readonly IMapper _mapper;
 
-        public UserController(IGenericRepository<User> userRepo, IPasswordService passwordService, IMapper mapper )
+        public UserController(IGenericRepository<User> userRepository, IPasswordService passwordService, IMapper mapper )
         {
 
-            _userRepo = userRepo;
+            _userRepository = userRepository;
             _passwordService = passwordService;
             _mapper = mapper;
         }
@@ -29,7 +29,7 @@ namespace babyApi.Controllers
 
         public IActionResult GetAll()
         {
-            return Ok(_userRepo.GetAll());
+            return Ok(_userRepository.GetAll());
         }
 
 
@@ -38,10 +38,10 @@ namespace babyApi.Controllers
         public IActionResult GetById(int id)
         {
 
-            if (_userRepo.GetById(id) == null)
+            if (_userRepository.GetById(id) == null)
                 return BadRequest("User Not Found");
 
-            return Ok(_userRepo.GetById(id));
+            return Ok(_userRepository.GetById(id));
 
         }
 
@@ -61,7 +61,7 @@ namespace babyApi.Controllers
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            return Ok(_userRepo.Add(user));
+            return Ok(_userRepository.Add(user));
 
 
         }
@@ -74,7 +74,7 @@ namespace babyApi.Controllers
             if (userDto == null)
                 return BadRequest("User Not Found");
             var userUp = _mapper.Map<User>(userDto);
-            return Ok(_userRepo.Update(userUp));
+            return Ok(_userRepository.Update(userUp));
         }
 
 
@@ -85,7 +85,7 @@ namespace babyApi.Controllers
             if (userDto == null)
                 return BadRequest("User Not Found");
             var userDel = _mapper.Map<User>(userDto);
-            return Ok(_userRepo.Delete(userDel));
+            return Ok(_userRepository.Delete(userDel));
 
         }
 

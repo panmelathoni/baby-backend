@@ -1,10 +1,10 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
 using babyApi.domain;
-using babyApi.data.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using babyApi.domain.Dto;
+using babyApi.services.Interfaces;
 
 namespace babyApi.Controllers
 {
@@ -13,15 +13,16 @@ namespace babyApi.Controllers
     [Authorize]
     public class BabyProfileController : ControllerBase
     {
-        private readonly IGenericRepository<BabyProfile> _babyProfileRepo;
+       
         private readonly IMapper _mapper;
+        private readonly IBabyProfileService _babyProfileService;
 
 
-        public BabyProfileController(IGenericRepository<BabyProfile> babyProfileRepo, IMapper mapper)
+
+        public BabyProfileController(IBabyProfileService babyProfileService, IMapper mapper)
         {
-
-            _babyProfileRepo = babyProfileRepo;
             _mapper = mapper;
+            _babyProfileService = babyProfileService;
         }
 
 
@@ -29,7 +30,7 @@ namespace babyApi.Controllers
 
         public IActionResult GetAll()
         {
-            var bpAll = _mapper.Map<List<BabyProfileDto>>(_babyProfileRepo.GetAll());
+            var bpAll = _mapper.Map<List<BabyProfileDto>>(_babyProfileService.GetAll());
             return Ok(bpAll);
         }
 
@@ -39,10 +40,10 @@ namespace babyApi.Controllers
         public IActionResult GetById(int id)
         {
 
-            if (_babyProfileRepo.GetById(id) == null)
+            if (_babyProfileService.GetById(id) == null)
                 return BadRequest("Baby Profile Not Found");
 
-            var bpById = _mapper.Map<BabyProfileDto>(_babyProfileRepo.GetById(id));
+            var bpById = _mapper.Map<BabyProfileDto>(_babyProfileService.GetById(id));
 
             return Ok(bpById);
 
@@ -54,7 +55,7 @@ namespace babyApi.Controllers
         public IActionResult AddBabyProfile(BabyProfileDto babyProfileDto)
         {
             var bpAdd = _mapper.Map<BabyProfile>(babyProfileDto);
-            return Ok(_babyProfileRepo.Add(bpAdd));
+            return Ok(_babyProfileService.Add(bpAdd));
         }
 
         [HttpPut]
@@ -66,7 +67,7 @@ namespace babyApi.Controllers
 
             var bpUp = _mapper.Map<BabyProfile>(babyProfileDto);
 
-            return Ok(_babyProfileRepo.Update(bpUp));
+            return Ok(_babyProfileService.Update(bpUp));
         }
 
 
@@ -79,9 +80,10 @@ namespace babyApi.Controllers
 
             var bpDel = _mapper.Map<BabyProfile>(babyProfileDto);
 
-            return Ok(_babyProfileRepo.Delete(bpDel));
+            return Ok(_babyProfileService.Delete(bpDel));
 
         }
 
     }
+
 }

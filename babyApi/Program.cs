@@ -1,12 +1,10 @@
-global  using babyApi.data;
 global using Microsoft.EntityFrameworkCore;
+using babyApi.data.Context;
 using babyApi.data.Repositories;
 using babyApi.domain;
 using babyApi.services.Interfaces;
 using babyApi.services.Services;
-using FluentAssertions.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -44,12 +42,17 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddControllers();
-builder.Services.AddTransient<IGenericRepository<Activity>, GenericRepository<Activity>>() ;
-builder.Services.AddTransient<IGenericRepository<BabyActivity>, GenericRepository<BabyActivity>>();
-builder.Services.AddTransient<IGenericRepository<BabyProfile>, GenericRepository<BabyProfile>>();
-builder.Services.AddTransient<IGenericRepository<User>, GenericRepository<User>>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)) ;
+
+builder.Services.AddScoped<IBabyProfileRepository, BabyProfileRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 builder.Services.AddScoped<IJWTService, JWTService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IBabyProfileService, BabyProfileService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
