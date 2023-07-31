@@ -1,10 +1,6 @@
 ﻿using babyApi.test.MockData;
-using Microsoft.AspNet.Identity;
 using Moq;
-
-using Microsoft.AspNetCore.Mvc;
 using babyApi.data.Repositories;
-using babyApi.domain;
 using babyApi.services.Interfaces;
 using babyApi.services.Services;
 

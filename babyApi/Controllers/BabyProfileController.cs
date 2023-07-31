@@ -10,7 +10,7 @@ namespace babyApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class BabyProfileController : ControllerBase
     {
        
