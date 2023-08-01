@@ -1,4 +1,4 @@
-﻿using babyApi.data.Repositories;
+﻿
 using babyApi.domain;
 using babyApi.domain.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +11,19 @@ namespace babyApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IGenericRepository<User> _userRepository;
+     
         private readonly IPasswordService _passwordService;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public UserController(IGenericRepository<User> userRepository, IPasswordService passwordService, IMapper mapper )
+
+        public UserController( IPasswordService passwordService, IMapper mapper, IUserService userService )
         {
 
-            _userRepository = userRepository;
+           
             _passwordService = passwordService;
             _mapper = mapper;
+            _userService = userService;
         }
 
 
@@ -29,7 +32,7 @@ namespace babyApi.Controllers
 
         public IActionResult GetAll()
         {
-            return Ok(_userRepository.GetAll());
+            return Ok(_userService.GetAll());
         }
 
 
@@ -38,10 +41,10 @@ namespace babyApi.Controllers
         public IActionResult GetById(int id)
         {
 
-            if (_userRepository.GetById(id) == null)
+            if (_userService.GetById(id) == null)
                 return BadRequest("User Not Found");
 
-            return Ok(_userRepository.GetById(id));
+            return Ok(_userService.GetById(id));
 
         }
 
@@ -61,7 +64,7 @@ namespace babyApi.Controllers
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
 
-            return Ok(_userRepository.Add(user));
+            return Ok(_userService.Add(user));
 
 
         }
@@ -74,7 +77,7 @@ namespace babyApi.Controllers
             if (userDto == null)
                 return BadRequest("User Not Found");
             var userUp = _mapper.Map<User>(userDto);
-            return Ok(_userRepository.Update(userUp));
+            return Ok(_userService.Update(userUp));
         }
 
 
@@ -85,7 +88,7 @@ namespace babyApi.Controllers
             if (userDto == null)
                 return BadRequest("User Not Found");
             var userDel = _mapper.Map<User>(userDto);
-            return Ok(_userRepository.Delete(userDel));
+            return Ok(_userService.Delete(userDel));
 
         }
 

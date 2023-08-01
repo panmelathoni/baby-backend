@@ -1,6 +1,7 @@
 ﻿using babyApi.data.Repositories;
 using babyApi.services.Interfaces;
 using babyApi.services.Services;
+using babyApi.test.MockData;
 using Moq;
 
 namespace babyApi.test.System.Controllers
@@ -10,7 +11,7 @@ namespace babyApi.test.System.Controllers
        
 
         [Fact]
-        public void BabyProfile_GetAll()
+        public void BabyProfile_GetAll_ShouldReturnSuccess()
         {
 
             //Arrange - What do I need to bring in 
@@ -27,5 +28,7 @@ namespace babyApi.test.System.Controllers
            
         }
     }
+
+
 }
  

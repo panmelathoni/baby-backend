@@ -4,7 +4,7 @@ namespace babyApi.test.MockData
 {
     public class AddNewBabyProfileMockData
     {
-        public static List<BabyProfile> Add()
+        public static List<BabyProfile> GetById(int id)
         {
             return new List<BabyProfile>
             {
